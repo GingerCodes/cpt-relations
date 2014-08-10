@@ -31,7 +31,8 @@ $post_types = array_diff_key($post_types, array_flip($ignore_post_types));
                     <td>
                         <form method="POST">
                             <input type="hidden" name="cptr[key]" value="<?php echo $key; ?>" />
-                            <input type="hidden" name="action" value="delete" />
+                            <input type="hidden" name="action" value="cptr_delete" />
+                            <input type="hidden" name="page" value="cpt-relations">
                             <input type="submit" name="submit" value="Delete" class="button button-cancel"/>
                         </form>
                     </td>
