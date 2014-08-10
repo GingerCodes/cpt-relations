@@ -15,7 +15,7 @@ function cptr_regsiter_admin_page() {
 }
 
 function cpt_relations() {
-    $cpt_relations = get_option('cpt_relations');
+    global $cpt_relations;
     if (!$cpt_relations) {
         $cpt_relations = array();
     }
@@ -24,7 +24,7 @@ function cpt_relations() {
             case 'cptr_add_relation':
                 $relation_key = sanitize_title($_POST['cptr']['name']);
                 if (!isset($cpt_relations[$relation_key])) {
-                    $_POST['cptr']['key'] = $relation_key;
+                    $_POST['cptr']['key'] = "_cptr_" . $relation_key;
                     $cpt_relations[$relation_key] = $_POST['cptr'];
                     if (update_option('cpt_relations', $cpt_relations)) {
                         $display_result = array(

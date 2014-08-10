@@ -10,6 +10,7 @@ $post_types = array_diff_key($post_types, array_flip($ignore_post_types));
 
 <div class='wrap'>
     <h2>Custom Post Type Relations</h2>
+    <hr />
     <h3>Existing Relations</h3>
     <table class="wp-list-table widefat fixed posts">
         <thead>
@@ -25,7 +26,7 @@ $post_types = array_diff_key($post_types, array_flip($ignore_post_types));
             <?php foreach ($cpt_relations as $key => $relation) { ?>
                 <tr>
                     <td><strong><?php echo $relation['name']; ?></strong></td>
-                    <td><?php echo $key; ?></td>
+                    <td><?php echo $relation['key']; ?></td>
                     <td><?php echo $post_types[$relation['from_pt']]->label; ?></td>
                     <td><?php echo $post_types[$relation['to_pt']]->label; ?></td>
                     <td>
