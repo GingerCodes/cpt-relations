@@ -15,21 +15,33 @@ function cptr_regsiter_admin_page() {
 }
 
 function cpt_relations() {
+    $cpt_relations = get_option('cpt_relations');
+    if (!$cpt_relations) {
+        $cpt_relations = array();
+    }
     if (isset($_POST['action'])) {
-        $cpt_relations = get_option('cpt_relations');
-        if (!$cpt_relations) {
-            $cpt_relations = array();
-        }
-        $cpt_relations[] = $_POST['cptr'];
-        if (update_option('cpt_relations', $cpt_relations)) {
-            echo 'Success';
+        $relation_key = sanitize_title($_POST['cptr']['name']);
+        if (!isset($cpt_relations[$relation_key])) {
+            $_POST['cptr']['key'] = $relation_key;
+            $cpt_relations[$relation_key] = $_POST['cptr'];
+            if (update_option('cpt_relations', $cpt_relations)) {
+                $display_result = array(
+                    'css_class' => 'updated',
+                    'message' => 'Relation Added Successfully.'
+                );
+                unset($_POST);
+            } else {
+                $display_result = array(
+                    'css_class' => 'error',
+                    'message' => 'Error!!! Unable To Add New Relation.'
+                );
+            }
         } else {
-            echo 'Failed';
+            $display_result = array(
+                'css_class' => 'error',
+                'message' => 'Error!!! Given Relation Name Already Exists.'
+            );
         }
     }
     include CPTR_PLUGIN_DIR . '/pages/admin-page.php';
-}
-
-function cptr_add_relation() {
-    echo 'Form Submitted';
 }
