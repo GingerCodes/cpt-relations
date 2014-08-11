@@ -40,6 +40,7 @@ function cpt_relations_metabox($post) {
             $allPostsIDs = array_merge($allPostsIDs, array_values($selectedItems[$key]));
         }
     }
+    $allPostsIDs = array_unique($allPostsIDs);
 
     $posts_args = array(
         'post_type' => 'any',
