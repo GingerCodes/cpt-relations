@@ -55,7 +55,7 @@ function cptr_get_relations($cptr_keys, $relation_info = true, $post_id = null) 
 
         $posts_args = array(
             'post_type' => 'any',
-            'post__in' => $allPostsIDs,
+            'post__in' => $allItemsIDs,
             'posts_per_page' => -1,
         );
         $cpt_related_posts = get_posts($posts_args);
