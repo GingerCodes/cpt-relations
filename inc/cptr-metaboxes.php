@@ -31,39 +31,37 @@ function cpt_relations_metabox($post) {
 
     wp_nonce_field('cprt_metabox', 'cprt_metabox_nonce');
 
-    $selectedPosts = array();
+    $selectedItems = array();
     $allPostsIDs = array();
-//    foreach ($cpt_relations as $relation) {
-//        $selectedPosts[$fieldName] = get_post_meta($post->ID, $fieldName);
-//        if (!empty($selectedPosts[$fieldName])) {
-//            $allPostsIDs = array_merge($allPostsIDs, array_values($selectedPosts[$fieldName]));
-//        }
-//    }
-//
-//    $posts_args = array(
-//        'post_type' => 'artist',
-//        'post__in' => $allPostsIDs,
-//        'posts_per_page' => -1,
-//    );
-//    $cpt_related_posts = get_posts($posts_args);
+    $prepopulatedData = array();
+    foreach ($cpt_relations as $key => $relation) {
+        $selectedItems[$key] = get_post_meta($post->ID, $relation['key']);
+        if (!empty($selectedItems[$key])) {
+            $allPostsIDs = array_merge($allPostsIDs, array_values($selectedItems[$key]));
+        }
+    }
+
+    $posts_args = array(
+        'post_type' => 'any',
+        'post__in' => $allPostsIDs,
+        'posts_per_page' => -1,
+    );
+
+    $cpt_related_posts = get_posts($posts_args);
     ?>
     <table class="form-table">
         <?php
         foreach ($cpt_relations as $key => $relation) {
-//        var_dump($artists[$fieldName]);
-//        if (!empty($selectedPosts[$fieldName])) {
-////            var_dump($fieldName);
-//            foreach ($selectedPosts[$fieldName] as $selectedArtist) {
-////                var_dump($artist);
-//                foreach ($artists as $artist) {
-//                    if ($artist->ID == $selectedArtist) {
-//                        $temp = array('id' => $artist->ID, 'name' => $artist->post_title);
-////                        var_dump("Temp : " . $temp);
-//                        $prepopulatedData[$fieldName][] = $temp;
-//                    }
-//                }
-//            }
-//        }
+            if (!empty($selectedItems[$key])) {
+                foreach ($selectedItems[$key] as $selectedItem) {
+                    foreach ($cpt_related_posts as $selectedPost) {
+                        if ($selectedPost->ID == $selectedItem) {
+                            $temp = array('id' => $selectedPost->ID, 'name' => $selectedPost->post_title);
+                            $prepopulatedData[$relation['key']][] = $temp;
+                        }
+                    }
+                }
+            }
             ?>
             <tr>
                 <td>
@@ -77,6 +75,9 @@ function cpt_relations_metabox($post) {
         ?>
     </table>
     <?php
+    echo '<script type="text/javascript">';
+    echo '  var prepopulatedData= ' . json_encode($prepopulatedData);
+    echo '</script>';
 }
 
 function cprt_save_relations_metabox_data($post_id) {
@@ -93,7 +94,6 @@ function cprt_save_relations_metabox_data($post_id) {
 
     // Verify that the nonce is valid.
     if (!wp_verify_nonce($_POST['cprt_metabox_nonce'], 'cprt_metabox')) {
-
         return;
     }
 
@@ -103,7 +103,7 @@ function cprt_save_relations_metabox_data($post_id) {
     }
 
     // Check the user's permissions.
-    if (!isset($_POST['post_type'])) {
+    if (!isset($_POST['post_type']) || (get_post_type($post_id) != $_POST['post_type'] && get_post_type($post_id) != "revision")) {
         return;
     }
 
@@ -112,10 +112,11 @@ function cprt_save_relations_metabox_data($post_id) {
     }
 
     foreach ($cpt_relations as $key => $relation) {
-        if ($relation['from_pt'] != get_post_type($post_id)) {
+        if ($relation['from_pt'] != $_POST['post_type']) {
             unset($cpt_relations[$key]);
         }
     }
+
     foreach ($cpt_relations as $key => $relation) {
         $items = $_POST[$relation['key']];
         $items = explode(",", $items);

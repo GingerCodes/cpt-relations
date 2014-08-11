@@ -7,19 +7,16 @@ jQuery(document).ready(function() {
             theme: "facebook",
             preventDuplicates: true,
             allowFreeTagging: true,
-//        tokenValue: "ID",
-//        propertyToSearch: "post_title",
         });
     })
 
 
 
-//    jQuery.each(prepopulatedData, function(field, artists) {
-//        console.log(field + ": " + artists);
-//        jQuery.each(artists, function(index, artist) {
-//            jQuery("#" + field).tokenInput('add', artist);
-//            console.log(index + ": " + artist);
-//        })
-//
-//    });
+    jQuery.each(prepopulatedData, function(field, items) {
+        console.log(field + ": " + items);
+        jQuery.each(items, function(index, item) {
+            jQuery("#" + field).tokenInput('add', item);
+            console.log(index + ": " + item);
+        })
+    });
 });
