@@ -23,7 +23,7 @@ $cpt_relations = get_option('cpt_relations');
 include 'inc/cptr-admin-pages.php';
 include 'inc/cptr-metaboxes.php';
 include 'inc/cptr-ajax-actions.php';
-
+include 'inc/cptr-theme-functions.php';
 
 add_action('admin_enqueue_scripts', 'cptr_enqueue_scripts');
 
@@ -42,3 +42,5 @@ function cptr_enqueue_scripts($hook) {
         wp_enqueue_style('autoSuggest-fb-theme', CPTR_PLUGIN_URL . 'assets/css/token-input-facebook.css');
     }
 }
+
+
