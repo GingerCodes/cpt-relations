@@ -3,6 +3,7 @@
 function cptr_get_relations_ids($cptr_keys, $post_id = null) {
     global $post;
     global $cpt_relations;
+    $cpt_relations = get_option('cpt_relations');
     $selectedItemsIDs = false;
 
     if (is_null($post_id)) {
@@ -61,10 +62,12 @@ function cptr_get_relations($cptr_keys, $relation_info = true, $post_id = null) 
         $cpt_related_posts = get_posts($posts_args);
 
         foreach ($selectedItemsIDs as $key => $selectedItemIDs) {
+            $return_relations[$key]['posts'] = array();
             if ($relation_info) {
                 $return_relations[$key]['info'] = $cpt_relations[substr($key, 6)];
             }
             foreach ($selectedItemIDs as $i => $selectedItemID) {
+                
                 foreach ($cpt_related_posts as $related_post) {
                     if ($related_post->ID == $selectedItemID) {
                         $return_relations[$key]['posts'][$selectedItemID] = $related_post;
