@@ -7,9 +7,11 @@ function cptr_add_metaboxes() {
     global $cpt_relations;
     global $post;
     $relation_exists = false;
-    foreach ($cpt_relations as $key => $relation) {
-        if ($relation['from_pt'] != $post->post_type) {
-            unset($cpt_relations[$key]);
+    if(!empty($cpt_relations)){
+        foreach ($cpt_relations as $key => $relation) {
+            if ($relation['from_pt'] != $post->post_type) {
+                unset($cpt_relations[$key]);
+            }
         }
     }
     if (!empty($cpt_relations)) {
