@@ -9,7 +9,7 @@
   Plugin URI: http://gingercodes.com/cpt-relations
   Description: Plugin to define relations with different post types in WordPress.
   Author: Alex Jose
-  Version: 0.1
+  Version: 0.2
   Author URI: http://alexjose.in/
  */
 
